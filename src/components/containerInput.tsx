@@ -1,6 +1,6 @@
 
 import axios from "axios"
-import { createSignal, onMount } from "solid-js"
+import { createSignal, For, onMount } from "solid-js"
 import { styled } from "solid-styled-components"
 
 const ContainerMaster = styled('div')`
@@ -64,7 +64,8 @@ export const ContainerInput = () => {
     const getMoney = async () => {
         try{    
             const response = await axios.get('http://localhost:3333/money/getall')
-            setMoney(response.data)
+            setMoney(response.data.response)
+            console.log(response.data.response)
             console.log(money())
             money().forEach((money:Money) => {
                if(money.account == 'input'){
@@ -90,9 +91,11 @@ export const ContainerInput = () => {
                     <Title>Minhas receitas</Title>
                 </HeadBox>
                 <InfoBox>
-                    {revenue().map((item) => (
-                        <TitleMoney>{item.name}</TitleMoney>
-                    ))}
+                   <For each={revenue()}>
+                        {(revenue)=> (
+                            <TitleMoney>{revenue.name}</TitleMoney>
+                        )}
+                   </For>
                 </InfoBox>
             </Box>
             <Box>
@@ -100,9 +103,11 @@ export const ContainerInput = () => {
                     <Title>Minhas dividas</Title>
                 </HeadBox>
                 <InfoBox>
-                    {debts().map((item) => (
-                        <TitleMoney>{item.name}</TitleMoney>
-                    ))}
+                   <For each={debts()}>
+                        {(debts)=> (
+                            <TitleMoney>{debts.name}</TitleMoney>
+                        )}
+                   </For>
                 </InfoBox>
             </Box>
         </ContainerMaster>
