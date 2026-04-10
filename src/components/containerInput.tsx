@@ -17,6 +17,7 @@ const Box = styled('div')`
     flex-direction: column;
     width: 400px;
     height: 400px;
+    border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 `
 const HeadBox = styled('div')`
@@ -32,21 +33,44 @@ const Title = styled('h1')`
     font-size: 20px;
     font-family: "Roboto", sans-serif;
     font-weight: 300;
-    color: #888888;
+    color: #0f0f0f;
 `
 
 const InfoBox = styled('div')`
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: column;
     width: 100%;
     height: 100%;
 `
+const MinimalContainerBox = styled('div')`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    /* margin-top: 10px; */
+    width: 100%;
+    height: 50px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    gap: 2px;
+    color: #5a5a5a;
+`
+
 const TitleMoney = styled('h1')`
-    font-size: 10px;
+    font-size: 15px;
     font-family: "Roboto", sans-serif;
     font-weight: 300;
+`
+
+const ValueMoney = styled('h1')`
+    font-size: 15px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+`
+
+const ExtraStyle = styled('span')`
+    font-weight: 500;
 `
 
 type Money = {
@@ -62,26 +86,26 @@ export const ContainerInput = () => {
     const [revenue, setRevenue] = createSignal<Money[]>([])
 
     const getMoney = async () => {
-        try{    
+        try {
             const response = await axios.get('http://localhost:3333/money/getall')
             setMoney(response.data.response)
             console.log(response.data.response)
             console.log(money())
-            money().forEach((money:Money) => {
-               if(money.account == 'input'){
-                //spread operator 
-                setRevenue((prev) => [...prev, money])
-               }
-               else{
-                setDebts((prev) => [...prev, money] )
-               }
+            money().forEach((money: Money) => {
+                if (money.account == 'input') {
+                    //spread operator 
+                    setRevenue((prev) => [...prev, money])
+                }
+                else {
+                    setDebts((prev) => [...prev, money])
+                }
             });
         }
-        catch(err){
+        catch (err) {
             console.log(err)
         }
     }
-    onMount(()=> {
+    onMount(() => {
         getMoney()
     })
     return (
@@ -91,11 +115,15 @@ export const ContainerInput = () => {
                     <Title>Minhas receitas</Title>
                 </HeadBox>
                 <InfoBox>
-                   <For each={revenue()}>
-                        {(revenue)=> (
-                            <TitleMoney>{revenue.name}</TitleMoney>
+                    <For each={revenue()}>
+                        {(revenue) => (
+                            <MinimalContainerBox>
+                                <TitleMoney>Nome: <ExtraStyle>{revenue.name}</ExtraStyle> </TitleMoney>
+                                <ValueMoney>Valor: <ExtraStyle>R$ {revenue.value}</ExtraStyle> </ValueMoney>
+                            </MinimalContainerBox>
+
                         )}
-                   </For>
+                    </For>
                 </InfoBox>
             </Box>
             <Box>
@@ -103,11 +131,14 @@ export const ContainerInput = () => {
                     <Title>Minhas dividas</Title>
                 </HeadBox>
                 <InfoBox>
-                   <For each={debts()}>
-                        {(debts)=> (
-                            <TitleMoney>{debts.name}</TitleMoney>
+                    <For each={debts()}>
+                        {(debts) => (
+                             <MinimalContainerBox>
+                                <TitleMoney>Nome: <ExtraStyle>{debts.name}</ExtraStyle></TitleMoney>
+                                <ValueMoney>Valor: <ExtraStyle>R$ {debts.value}</ExtraStyle></ValueMoney>
+                            </MinimalContainerBox>
                         )}
-                   </For>
+                    </For>
                 </InfoBox>
             </Box>
         </ContainerMaster>
