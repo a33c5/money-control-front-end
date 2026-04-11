@@ -32,8 +32,8 @@ const HeadBox = styled('div')`
 const Title = styled('h1')`
     font-size: 20px;
     font-family: "Roboto", sans-serif;
-    font-weight: 300;
-    color: #0f0f0f;
+    font-weight: 400;
+    color: #0f4284;
 `
 
 const InfoBox = styled('div')`
@@ -49,7 +49,6 @@ const MinimalContainerBox = styled('div')`
     justify-content: center;
     flex-direction: column;
     padding: 10px;
-    /* margin-top: 10px; */
     width: 100%;
     height: 50px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -71,6 +70,28 @@ const ValueMoney = styled('h1')`
 
 const ExtraStyle = styled('span')`
     font-weight: 500;
+`
+
+const ExtraStyleRevenue = styled('span')`
+    font-weight: 500;
+    color: green;
+`
+
+const ExtraStyleDebt = styled('span')`
+    font-weight: 500;
+    color: red;
+`
+
+const SendMoneyButton = styled('button')`
+    width: 50%;
+    height: 50px;
+    margin: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    font-size: 15px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 350;
+    cursor: pointer;
 `
 
 type Money = {
@@ -119,12 +140,12 @@ export const ContainerInput = () => {
                         {(revenue) => (
                             <MinimalContainerBox>
                                 <TitleMoney>Nome: <ExtraStyle>{revenue.name}</ExtraStyle> </TitleMoney>
-                                <ValueMoney>Valor: <ExtraStyle>R$ {revenue.value}</ExtraStyle> </ValueMoney>
+                                <ValueMoney>Valor: <ExtraStyleRevenue>R$ {revenue.value}</ExtraStyleRevenue> </ValueMoney>
                             </MinimalContainerBox>
-
                         )}
                     </For>
                 </InfoBox>
+                <SendMoneyButton>Cadastrar nova receita</SendMoneyButton>
             </Box>
             <Box>
                 <HeadBox>
@@ -135,11 +156,12 @@ export const ContainerInput = () => {
                         {(debts) => (
                              <MinimalContainerBox>
                                 <TitleMoney>Nome: <ExtraStyle>{debts.name}</ExtraStyle></TitleMoney>
-                                <ValueMoney>Valor: <ExtraStyle>R$ {debts.value}</ExtraStyle></ValueMoney>
+                                <ValueMoney>Valor: <ExtraStyleDebt>R$ {debts.value}</ExtraStyleDebt></ValueMoney>
                             </MinimalContainerBox>
                         )}
                     </For>
                 </InfoBox>
+                <SendMoneyButton>Cadastrar nova divida</SendMoneyButton>
             </Box>
         </ContainerMaster>
     )
