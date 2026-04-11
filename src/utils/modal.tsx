@@ -1,4 +1,6 @@
+import type { JSXElement } from "solid-js";
 import { styled } from "solid-styled-components";
+import type { Component } from "solid-js";
 
 const Overlay = styled('div')`
     display: flex;
@@ -29,12 +31,16 @@ const CloseButton = styled('button')`
   font-size: 20px;
   cursor: pointer;
 `
+type ModalProps = {
+    children: JSXElement | JSXElement[]
+}
 
-export const Modal = () => {
+export const Modal: Component<ModalProps> = (props) => {
     return (
         <Overlay>
             <ContainerModal>
                 <CloseButton>X</CloseButton>
+                    {props.children}
             </ContainerModal>
         </Overlay>
     )
