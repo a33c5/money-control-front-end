@@ -17,8 +17,8 @@ const ContainerModal = styled('div')`
   position: relative;
   width: 400px;
   height: 400px;
-  background-color: rgba(78, 148, 228, 0.8);
   border-radius: 20px;
+  background-color: white;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
 `;
 
@@ -31,16 +31,18 @@ const CloseButton = styled('button')`
   font-size: 20px;
   cursor: pointer;
 `
+
 type ModalProps = {
-    children: JSXElement | JSXElement[]
+    children: JSXElement | JSXElement[];
+    onClose: () => void;
 }
 
-export const Modal: Component<ModalProps> = (props) => {
+export const Modal: Component<ModalProps> = ({children, onClose}) => {
     return (
-        <Overlay>
+        <Overlay onClick={onClose}>
             <ContainerModal>
-                <CloseButton>X</CloseButton>
-                    {props.children}
+                <CloseButton onClick={onClose}>X</CloseButton>
+                    {children}
             </ContainerModal>
         </Overlay>
     )

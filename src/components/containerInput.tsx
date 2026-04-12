@@ -1,7 +1,8 @@
 
 import axios from "axios"
-import { createSignal, For, onMount } from "solid-js"
+import { createSignal, For, onMount, Show } from "solid-js"
 import { styled } from "solid-styled-components"
+import { Modal } from "../utils/modal"
 
 const ContainerMaster = styled('div')`
     display: flex;
@@ -9,7 +10,7 @@ const ContainerMaster = styled('div')`
     justify-content: center;
     width: 100%;
     height: 600px;
-    gap: 20px;
+    gap: 50px;
 `
 const Box = styled('div')`
     display: flex;
@@ -19,6 +20,7 @@ const Box = styled('div')`
     height: 400px;
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    background-color: white;
 `
 const HeadBox = styled('div')`
     display: flex;
@@ -105,6 +107,7 @@ export const ContainerInput = () => {
     const [money, setMoney] = createSignal<Money[]>([])
     const [debts, setDebts] = createSignal<Money[]>([])
     const [revenue, setRevenue] = createSignal<Money[]>([])
+    const [openModal, setOpenModal] = createSignal(false)
 
     const getMoney = async () => {
         try {
@@ -126,43 +129,54 @@ export const ContainerInput = () => {
             console.log(err)
         }
     }
+
     onMount(() => {
         getMoney()
     })
+
     return (
-        <ContainerMaster>
-            <Box>
-                <HeadBox>
-                    <Title>Minhas receitas</Title>
-                </HeadBox>
-                <InfoBox>
-                    <For each={revenue()}>
-                        {(revenue) => (
-                            <MinimalContainerBox>
-                                <TitleMoney>Nome: <ExtraStyle>{revenue.name}</ExtraStyle> </TitleMoney>
-                                <ValueMoney>Valor: <ExtraStyleRevenue>R$ {revenue.value}</ExtraStyleRevenue> </ValueMoney>
-                            </MinimalContainerBox>
-                        )}
-                    </For>
-                </InfoBox>
-                <SendMoneyButton>Cadastrar nova receita</SendMoneyButton>
-            </Box>
-            <Box>
-                <HeadBox>
-                    <Title>Minhas dividas</Title>
-                </HeadBox>
-                <InfoBox>
-                    <For each={debts()}>
-                        {(debts) => (
-                             <MinimalContainerBox>
-                                <TitleMoney>Nome: <ExtraStyle>{debts.name}</ExtraStyle></TitleMoney>
-                                <ValueMoney>Valor: <ExtraStyleDebt>R$ {debts.value}</ExtraStyleDebt></ValueMoney>
-                            </MinimalContainerBox>
-                        )}
-                    </For>
-                </InfoBox>
-                <SendMoneyButton>Cadastrar nova divida</SendMoneyButton>
-            </Box>
-        </ContainerMaster>
+        <>
+            <ContainerMaster>
+                <Box>
+                    <HeadBox>
+                        <Title>Minhas receitas</Title>
+                    </HeadBox>
+                    <InfoBox>
+                        <For each={revenue()}>
+                            {(revenue) => (
+                                <MinimalContainerBox>
+                                    <TitleMoney>Nome: <ExtraStyle>{revenue.name}</ExtraStyle> </TitleMoney>
+                                    <ValueMoney>Valor: <ExtraStyleRevenue>R$ {revenue.value}</ExtraStyleRevenue> </ValueMoney>
+                                </MinimalContainerBox>
+                            )}
+                        </For>
+                    </InfoBox>
+                    <SendMoneyButton onClick={() => setOpenModal(true)}>Cadastrar nova receita</SendMoneyButton>
+                </Box>
+                <Box>
+                    <HeadBox>
+                        <Title>Minhas dividas</Title>
+                    </HeadBox>
+                    <InfoBox>
+                        <For each={debts()}>
+                            {(debts) => (
+                                <MinimalContainerBox>
+                                    <TitleMoney>Nome: <ExtraStyle>{debts.name}</ExtraStyle></TitleMoney>
+                                    <ValueMoney>Valor: <ExtraStyleDebt>R$ {debts.value}</ExtraStyleDebt></ValueMoney>
+                                </MinimalContainerBox>
+                            )}
+                        </For>
+                    </InfoBox>
+                    <SendMoneyButton onClick={() => setOpenModal(true)}>Cadastrar nova divida</SendMoneyButton>
+                </Box>
+            </ContainerMaster>
+            <Show when={openModal()}>
+                <Modal onClose={() => setOpenModal(false)}>
+                    <h1>Teste</h1>
+                </Modal>
+            </Show>
+
+        </>
+
     )
 }
