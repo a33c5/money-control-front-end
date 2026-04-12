@@ -4,6 +4,7 @@ import { createSignal, For, onMount, Show } from "solid-js"
 import { styled } from "solid-styled-components"
 import { Modal } from "../utils/modal"
 import { AiOutlineDelete } from 'solid-icons/ai'
+import { AiFillEdit } from 'solid-icons/ai'
 
 const ContainerMaster = styled('div')`
     display: flex;
@@ -52,7 +53,7 @@ const MinimalContainerBox = styled('div')`
     width: 100%;
     height: 50px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    gap: 2px;
+    gap: 7px;
     color: #5a5a5a;
 `
 
@@ -68,6 +69,13 @@ const DeleteIcon = styled(AiOutlineDelete)`
     width: 20px;
     height: 20px;
     color: red;
+    cursor:pointer;
+`
+
+const EditIcon = styled(AiFillEdit)`
+    width: 20px;
+    height: 20px;
+    color: #0f4284;
     cursor:pointer;
 `
 
@@ -137,21 +145,34 @@ export const ContainerInput = () => {
     const [debts, setDebts] = createSignal<Money[]>([])
     const [revenue, setRevenue] = createSignal<Money[]>([])
 
-    const [openModal, setOpenModal] = createSignal(false)
+    const [openModalCreate, setOpenModalCreate] = createSignal(false)
+    const [openModalEdit, setOpenModalEdit] = createSignal(false)
     const [isInput, setIsInput] = createSignal(false)
 
     const [name, setName] = createSignal<string>('')
     const [value, setValue] = createSignal<number>(0)
     const [account, setAccount] = createSignal<string>('')
 
+    const [editId, setEditId] = createSignal<string>('')
+
     const openRevenue = () => {
-        setOpenModal(true)
+        setOpenModalCreate(true)
         setIsInput(true)
     }
 
     const closeModal = () => {
-        setOpenModal(false)
+        setOpenModalCreate(false)
+        setOpenModalEdit(false)
         setIsInput(false)
+    }
+
+    const reset = () => {
+        setName('')
+        setValue(0)
+        setAccount('')
+        setMoney([])
+        setDebts([])
+        setRevenue([])
     }
 
     const conversion = (input: number | string): string => {
@@ -169,7 +190,7 @@ export const ContainerInput = () => {
         });
     };
 
-    const handleSubmit = async () => {
+    const handleCreate = async () => {
         isInput() ? setAccount('input') : setAccount('output')
         try {
             const response = await axios.post('http://localhost:3333/money/create', {
@@ -178,10 +199,30 @@ export const ContainerInput = () => {
                 account: account()
             })
             console.log(response)
+            reset()
+            getMoney()
         }
         catch (err) {
             console.log(err)
         }
+    }
+
+    const handleEdit = async () => {
+        const response = await axios.put('http://localhost:3333/money/update', {
+             id: editId(),
+             name: name(),
+             value: value() 
+            })
+        console.log(response)
+        reset()
+        getMoney()
+        setOpenModalEdit(false)
+    }
+
+    const makeEdit = (id: string) => {
+        setEditId(id)
+        setOpenModalEdit(true)
+        console.log(openModalEdit)
     }
 
     const handleDelete = async (id: string) => {
@@ -231,6 +272,7 @@ export const ContainerInput = () => {
                                         <TitleMoney>Nome: <ExtraStyle>{revenue.name}</ExtraStyle> </TitleMoney>
                                         <ValueMoney>Valor: <ExtraStyleRevenue>{conversion(revenue.value)} </ExtraStyleRevenue> </ValueMoney>
                                     </MinimalContainerinfo>
+                                    <EditIcon onClick={() => makeEdit(revenue.id)} />
                                     <DeleteIcon onClick={() => handleDelete(revenue.id)} />
                                 </MinimalContainerBox>
                             )}
@@ -248,19 +290,20 @@ export const ContainerInput = () => {
                                 <MinimalContainerBox>
                                     <MinimalContainerinfo>
                                         <TitleMoney>Nome: <ExtraStyle>{debts.name}</ExtraStyle></TitleMoney>
-                                        <ValueMoney>Valor: <ExtraStyleDebt>R$ {debts.value}</ExtraStyleDebt></ValueMoney>
+                                        <ValueMoney>Valor: <ExtraStyleDebt>{conversion(debts.value)}</ExtraStyleDebt></ValueMoney>
                                     </MinimalContainerinfo>
+                                    <EditIcon onClick={() => makeEdit(debts.id)} />
                                     <DeleteIcon onClick={() => handleDelete(debts.id)} />
                                 </MinimalContainerBox>
                             )}
                         </For>
                     </InfoBox>
-                    <SendMoneyButton onClick={() => setOpenModal(true)}>Cadastrar nova divida</SendMoneyButton>
+                    <SendMoneyButton onClick={() => setOpenModalCreate(true)}>Cadastrar nova divida</SendMoneyButton>
                 </Box>
             </ContainerMaster>
-            <Show when={openModal()}>
+            <Show when={openModalCreate()}>
                 <Modal onClose={closeModal}>
-                    <Form onSubmit={handleSubmit}>
+                    <Form onSubmit={handleCreate}>
                         <TitleMoney>Novo registro</TitleMoney>
                         <Input placeholder="Nome:" onInput={(e) => setName(e.currentTarget.value)} />
                         <Input placeholder="Valor:" onInput={(e) => setValue(Number(e.currentTarget.value))} />
@@ -268,7 +311,19 @@ export const ContainerInput = () => {
                     </Form>
                 </Modal>
             </Show>
-
+            <Show when={(openModalEdit())}>
+                <Modal onClose={closeModal}>
+                    <Form onSubmit={(e) => {
+                        e.preventDefault()
+                        handleEdit()
+                    }}>
+                        <TitleMoney>Editar registro</TitleMoney>
+                        <Input placeholder="Nome:" onInput={(e) => setName(e.currentTarget.value)} />
+                        <Input placeholder="Valor:" onInput={(e) => setValue(Number(e.currentTarget.value))} />
+                        <SendMoneyButton type="submit">Editar</SendMoneyButton>
+                    </Form>
+                </Modal>
+            </Show>
         </>
 
     )
