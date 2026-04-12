@@ -96,6 +96,28 @@ const SendMoneyButton = styled('button')`
     cursor: pointer;
 `
 
+const InputName = styled('input')`
+    width: 90%;
+    height: 50px;
+    padding: 10px;
+    border-radius: 10px;
+`
+const InputValue = styled('input')`
+    width: 90%;
+    height: 50px;
+    padding: 10px;
+    border-radius: 10px;
+`
+const Form = styled('form')`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+`
+
 type Money = {
     id: string,
     name: string,
@@ -107,14 +129,46 @@ export const ContainerInput = () => {
     const [money, setMoney] = createSignal<Money[]>([])
     const [debts, setDebts] = createSignal<Money[]>([])
     const [revenue, setRevenue] = createSignal<Money[]>([])
-    const [openModal, setOpenModal] = createSignal(false)
 
+    const [openModal, setOpenModal] = createSignal(false)
+    const [isInput, setIsInput] = createSignal(false)
+
+    const [name, setName] = createSignal<string>('')
+    const [value, setValue] = createSignal<number | null>(null)
+    const [account, setAccount] = createSignal<string>('')
+
+    const openRevenue = () => {
+        setOpenModal(true)
+        setIsInput(true)
+    }
+
+    const closeModal = () => {
+        setOpenModal(false)
+        setIsInput(false)
+    }
+
+    const handleSubmit = async () => {
+        isInput() ? setAccount('input') : setAccount('output')
+        try {
+            const response = await axios.post('http://localhost:3333/money/create',{
+                name: name(),
+                value: value(),
+                account: account()
+            })
+            console.log(response)
+        }
+        catch(err){
+            console.log(err)
+        }
+
+    }
+ 
     const getMoney = async () => {
         try {
             const response = await axios.get('http://localhost:3333/money/getall')
             setMoney(response.data.response)
-            console.log(response.data.response)
-            console.log(money())
+            // console.log(response.data.response)
+            // console.log(money())
             money().forEach((money: Money) => {
                 if (money.account == 'input') {
                     //spread operator 
@@ -151,7 +205,7 @@ export const ContainerInput = () => {
                             )}
                         </For>
                     </InfoBox>
-                    <SendMoneyButton onClick={() => setOpenModal(true)}>Cadastrar nova receita</SendMoneyButton>
+                    <SendMoneyButton onClick={openRevenue}>Cadastrar nova receita</SendMoneyButton>
                 </Box>
                 <Box>
                     <HeadBox>
@@ -171,8 +225,12 @@ export const ContainerInput = () => {
                 </Box>
             </ContainerMaster>
             <Show when={openModal()}>
-                <Modal onClose={() => setOpenModal(false)}>
-                    <h1>Teste</h1>
+                <Modal onClose={closeModal}>
+                    <Form  onSubmit={handleSubmit}>
+                        <InputName placeholder="Nome:" onInput={(e) => setName(e.currentTarget.value)} />
+                        <InputValue placeholder="Valor:" onInput={(e) => setValue(Number(e.currentTarget.value))} />
+                        <SendMoneyButton type="submit">Registrar</SendMoneyButton>
+                    </Form>
                 </Modal>
             </Show>
 

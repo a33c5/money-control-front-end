@@ -13,12 +13,17 @@ const Overlay = styled('div')`
 `
 
 const ContainerModal = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   padding: 20px;
   position: relative;
   width: 400px;
-  height: 400px;
+  height: 200px;
   border-radius: 20px;
   background-color: white;
+  gap: 10px;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
 `;
 
@@ -37,12 +42,12 @@ type ModalProps = {
     onClose: () => void;
 }
 
-export const Modal: Component<ModalProps> = ({children, onClose}) => {
+export const Modal: Component<ModalProps> = ({ children, onClose }) => {
     return (
         <Overlay onClick={onClose}>
-            <ContainerModal>
+            <ContainerModal onClick={(e) => e.stopPropagation()}>
                 <CloseButton onClick={onClose}>X</CloseButton>
-                    {children}
+                {children}
             </ContainerModal>
         </Overlay>
     )
