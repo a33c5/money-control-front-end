@@ -20,7 +20,7 @@ const ContainerModal = styled('div')`
   padding: 20px;
   position: relative;
   width: 400px;
-  height: 200px;
+  height: 250px;
   border-radius: 20px;
   background-color: white;
   gap: 10px;
