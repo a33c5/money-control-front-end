@@ -139,25 +139,42 @@ type Money = {
     value: number,
     account: string
 }
+const [money, setMoney] = createSignal<Money[]>([])
+const [debts, setDebts] = createSignal<Money[]>([])
+const [revenue, setRevenue] = createSignal<Money[]>([])
+
+const [openModalCreate, setOpenModalCreate] = createSignal(false)
+const [openModalEdit, setOpenModalEdit] = createSignal(false)
+const [isInput, setIsInput] = createSignal(false)
+
+const [name, setName] = createSignal<string>('')
+const [value, setValue] = createSignal<number>(0)
+const [account, setAccount] = createSignal<string>('')
+
+const [editId, setEditId] = createSignal<string>('')
+
+const [totalRevenue, setTotalRevenue] = createSignal<number>(0)
+const [totalDebts, setTotalDebts] = createSignal<number>(0)
 
 export const ContainerInput = () => {
-    const [money, setMoney] = createSignal<Money[]>([])
-    const [debts, setDebts] = createSignal<Money[]>([])
-    const [revenue, setRevenue] = createSignal<Money[]>([])
-
-    const [openModalCreate, setOpenModalCreate] = createSignal(false)
-    const [openModalEdit, setOpenModalEdit] = createSignal(false)
-    const [isInput, setIsInput] = createSignal(false)
-
-    const [name, setName] = createSignal<string>('')
-    const [value, setValue] = createSignal<number>(0)
-    const [account, setAccount] = createSignal<string>('')
-
-    const [editId, setEditId] = createSignal<string>('')
-
     const openRevenue = () => {
         setOpenModalCreate(true)
         setIsInput(true)
+    }
+
+    const totalValues = () => {
+        let resultRevenue = 0
+        let resultDebts = 0
+        revenue().forEach((item) => {
+            resultRevenue += Number(item.value)
+        })
+        debts().forEach((item) => {
+            resultDebts += Number(item.value)
+        })
+        setTotalRevenue(resultRevenue)
+        setTotalDebts(resultDebts)
+        console.log(totalDebts())
+        console.log(totalRevenue())
     }
 
     const closeModal = () => {
@@ -199,7 +216,6 @@ export const ContainerInput = () => {
                 account: account()
             })
             console.log(response)
-            reset()
             getMoney()
         }
         catch (err) {
@@ -209,12 +225,11 @@ export const ContainerInput = () => {
 
     const handleEdit = async () => {
         const response = await axios.put('http://localhost:3333/money/update', {
-             id: editId(),
-             name: name(),
-             value: value() 
-            })
+            id: editId(),
+            name: name(),
+            value: value()
+        })
         console.log(response)
-        reset()
         getMoney()
         setOpenModalEdit(false)
     }
@@ -235,18 +250,19 @@ export const ContainerInput = () => {
 
     const getMoney = async () => {
         try {
+            reset()
             const response = await axios.get('http://localhost:3333/money/getall')
             setMoney(response.data.response)
             console.log(money())
             money().forEach((money: Money) => {
                 if (money.account == 'input') {
-                    //spread operator 
                     setRevenue((prev) => [...prev, money])
                 }
                 else {
                     setDebts((prev) => [...prev, money])
                 }
             });
+            totalValues()
         }
         catch (err) {
             console.log(err)
