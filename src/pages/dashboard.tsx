@@ -1,7 +1,8 @@
 
 import { styled } from "solid-styled-components"
-import { NavBar } from "../components/navBar"
-import { ContainerInput } from "../components/containerInput"
+import { NavBar } from "../components/dashboard/navBar"
+import { ContainerInput } from "../components/dashboard/containerInput"
+import { TotalCards } from "../components/dashboard/totalCards"
 
 const ContainerMaster = styled('div')`
     display: flex;
@@ -15,6 +16,7 @@ export const DashBoard  = () => {
     return(
         <ContainerMaster>
             <NavBar/>
+            <TotalCards/>
             <ContainerInput/>
         </ContainerMaster>
 
