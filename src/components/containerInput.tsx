@@ -5,6 +5,7 @@ import { styled } from "solid-styled-components"
 import { Modal } from "../utils/modal"
 import { AiOutlineDelete } from 'solid-icons/ai'
 import { AiFillEdit } from 'solid-icons/ai'
+import { useMoney } from "./MoneyContext"
 
 const ContainerMaster = styled('div')`
     display: flex;
@@ -132,49 +133,30 @@ const Form = styled('form')`
     width: 100%;
     height: 100%;
 `
-
 type Money = {
     id: string,
     name: string,
     value: number,
     account: string
 }
-const [money, setMoney] = createSignal<Money[]>([])
-const [debts, setDebts] = createSignal<Money[]>([])
-const [revenue, setRevenue] = createSignal<Money[]>([])
-
-const [openModalCreate, setOpenModalCreate] = createSignal(false)
-const [openModalEdit, setOpenModalEdit] = createSignal(false)
-const [isInput, setIsInput] = createSignal(false)
-
-const [name, setName] = createSignal<string>('')
-const [value, setValue] = createSignal<number>(0)
-const [account, setAccount] = createSignal<string>('')
-
-const [editId, setEditId] = createSignal<string>('')
-
-const [totalRevenue, setTotalRevenue] = createSignal<number>(0)
-const [totalDebts, setTotalDebts] = createSignal<number>(0)
 
 export const ContainerInput = () => {
+    const [money, setMoney] = createSignal<Money[]>([])
+    const { debts, setDebts, revenue, setRevenue, totalRevenue } = useMoney()
+
+    const [openModalCreate, setOpenModalCreate] = createSignal(false)
+    const [openModalEdit, setOpenModalEdit] = createSignal(false)
+    const [isInput, setIsInput] = createSignal(false)
+
+    const [name, setName] = createSignal<string>('')
+    const [value, setValue] = createSignal<number>(0)
+    const [account, setAccount] = createSignal<string>('')
+
+    const [editId, setEditId] = createSignal<string>('')
+
     const openRevenue = () => {
         setOpenModalCreate(true)
         setIsInput(true)
-    }
-
-    const totalValues = () => {
-        let resultRevenue = 0
-        let resultDebts = 0
-        revenue().forEach((item) => {
-            resultRevenue += Number(item.value)
-        })
-        debts().forEach((item) => {
-            resultDebts += Number(item.value)
-        })
-        setTotalRevenue(resultRevenue)
-        setTotalDebts(resultDebts)
-        console.log(totalDebts())
-        console.log(totalRevenue())
     }
 
     const closeModal = () => {
@@ -262,7 +244,7 @@ export const ContainerInput = () => {
                     setDebts((prev) => [...prev, money])
                 }
             });
-            totalValues()
+            console.log(totalRevenue())
         }
         catch (err) {
             console.log(err)

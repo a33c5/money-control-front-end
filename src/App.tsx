@@ -1,10 +1,11 @@
+import { MoneyProvider } from "./components/MoneyContext"
 import { DashBoard } from "./pages/dashboard"
 
 function App() {
   return (
-    <>
-    <DashBoard/>
-    </>
+    <MoneyProvider>
+      <DashBoard />
+    </MoneyProvider>
   )
 }
 
