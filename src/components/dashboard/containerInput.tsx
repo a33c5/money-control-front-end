@@ -2,17 +2,16 @@
 import axios from "axios"
 import { createSignal, For, onMount, Show } from "solid-js"
 import { styled } from "solid-styled-components"
-import { Modal } from "../utils/modal"
+import { Modal } from "../../utils/modal"
 import { AiOutlineDelete } from 'solid-icons/ai'
 import { AiFillEdit } from 'solid-icons/ai'
 import { useMoney } from "./MoneyContext"
 
 const ContainerMaster = styled('div')`
     display: flex;
-    align-items: center;
     justify-content: center;
     width: 100%;
-    height: 600px;
+    height: 450px;
     gap: 50px;
 `
 const Box = styled('div')`
@@ -142,7 +141,7 @@ type Money = {
 
 export const ContainerInput = () => {
     const [money, setMoney] = createSignal<Money[]>([])
-    const { debts, setDebts, revenue, setRevenue, totalRevenue } = useMoney()
+    const { debts, setDebts, revenue, setRevenue} = useMoney()
 
     const [openModalCreate, setOpenModalCreate] = createSignal(false)
     const [openModalEdit, setOpenModalEdit] = createSignal(false)
@@ -244,7 +243,6 @@ export const ContainerInput = () => {
                     setDebts((prev) => [...prev, money])
                 }
             });
-            console.log(totalRevenue())
         }
         catch (err) {
             console.log(err)
