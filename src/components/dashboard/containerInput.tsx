@@ -19,7 +19,7 @@ const Box = styled('div')`
     align-items: center;
     flex-direction: column;
     width: 400px;
-    height: 400px;
+    height: 500px;
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     background-color: white;
@@ -156,6 +156,13 @@ export const ContainerInput = () => {
     const openRevenue = () => {
         setOpenModalCreate(true)
         setIsInput(true)
+    }
+
+    const findValueMoney = (id: string) => {
+       return (
+        debts().find((item) => item.id == id) ||
+        revenue().find((item) => item.id == id)
+    )
     }
 
     const closeModal = () => {
@@ -314,8 +321,8 @@ export const ContainerInput = () => {
                         handleEdit()
                     }}>
                         <TitleMoney>Editar registro</TitleMoney>
-                        <Input placeholder="Nome:" onInput={(e) => setName(e.currentTarget.value)} />
-                        <Input placeholder="Valor:" onInput={(e) => setValue(Number(e.currentTarget.value))} />
+                        <Input placeholder="Nome:" onInput={(e) => setName(e.currentTarget.value)} value={findValueMoney(editId())?.name}/>
+                        <Input placeholder="Valor:" onInput={(e) => setValue(Number(e.currentTarget.value))} value={findValueMoney(editId())?.value} />
                         <SendMoneyButton type="submit">Editar</SendMoneyButton>
                     </Form>
                 </Modal>

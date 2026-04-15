@@ -6,8 +6,8 @@ const ContainerMaster = styled('div')`
     justify-content: center;
     width: 100vw;
     height: 100px;
-    background-color: white;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+    box-shadow: 0 10px 25px rgba(26, 10, 255, 0.08);
 `
 const Logo = styled('img')`
     width: 250px;

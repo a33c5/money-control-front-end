@@ -12,7 +12,7 @@ const ContainerCard = styled('div')`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 44%;
+    width: 60%;
     height: 100%;
 `
 const Card = styled('div')<{bg: string}>`
