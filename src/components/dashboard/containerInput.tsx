@@ -19,7 +19,7 @@ const Box = styled('div')`
     align-items: center;
     flex-direction: column;
     width: 400px;
-    height: 500px;
+    height: 600px;
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     background-color: white;
