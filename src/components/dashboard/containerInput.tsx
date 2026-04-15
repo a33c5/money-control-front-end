@@ -141,7 +141,7 @@ type Money = {
 
 export const ContainerInput = () => {
     const [money, setMoney] = createSignal<Money[]>([])
-    const { debts, setDebts, revenue, setRevenue} = useMoney()
+    const { debts, setDebts, revenue, setRevenue } = useMoney()
 
     const [openModalCreate, setOpenModalCreate] = createSignal(false)
     const [openModalEdit, setOpenModalEdit] = createSignal(false)
@@ -159,10 +159,10 @@ export const ContainerInput = () => {
     }
 
     const findValueMoney = (id: string) => {
-       return (
-        debts().find((item) => item.id == id) ||
-        revenue().find((item) => item.id == id)
-    )
+        return (
+            debts().find((item) => item.id == id) ||
+            revenue().find((item) => item.id == id)
+        )
     }
 
     const closeModal = () => {
@@ -195,6 +195,7 @@ export const ContainerInput = () => {
         });
     };
 
+
     const handleCreate = async () => {
         isInput() ? setAccount('input') : setAccount('output')
         try {
@@ -223,9 +224,15 @@ export const ContainerInput = () => {
     }
 
     const makeEdit = (id: string) => {
+        const data = findValueMoney(id)
+
+        if (!data) return
+
         setEditId(id)
+        setName(data.name)
+        setValue(data.value)
+
         setOpenModalEdit(true)
-        console.log(openModalEdit)
     }
 
     const handleDelete = async (id: string) => {
@@ -321,8 +328,8 @@ export const ContainerInput = () => {
                         handleEdit()
                     }}>
                         <TitleMoney>Editar registro</TitleMoney>
-                        <Input placeholder="Nome:" onInput={(e) => setName(e.currentTarget.value)} value={findValueMoney(editId())?.name}/>
-                        <Input placeholder="Valor:" onInput={(e) => setValue(Number(e.currentTarget.value))} value={findValueMoney(editId())?.value} />
+                        <Input placeholder="Nome:" onInput={(e) => setName(e.currentTarget.value)} value={name()} />
+                        <Input placeholder="Valor:" onInput={(e) => setValue(Number(e.currentTarget.value))} value={value()} />
                         <SendMoneyButton type="submit">Editar</SendMoneyButton>
                     </Form>
                 </Modal>
