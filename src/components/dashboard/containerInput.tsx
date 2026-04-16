@@ -19,7 +19,7 @@ const Box = styled('div')`
     align-items: center;
     flex-direction: column;
     width: 400px;
-    height: 600px;
+    height: 500px;
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     background-color: white;
@@ -46,6 +46,7 @@ const InfoBox = styled('div')`
     flex-direction: column;
     width: 100%;
     height: 100%;
+    overflow-y: auto;
 `
 const MinimalContainerBox = styled('div')`
     display: flex;
@@ -63,7 +64,6 @@ const MinimalContainerinfo = styled('div')`
     justify-content: center;
     width: 90%;
     height: auto;
-    /* border: 1px solid red; */
 `
 const DeleteIcon = styled(AiOutlineDelete)`
     width: 20px;
