@@ -316,7 +316,7 @@ export const ContainerInput = () => {
                     <Form onSubmit={handleCreate}>
                         <TitleMoney>Novo registro</TitleMoney>
                         <Input placeholder="Nome:" onInput={(e) => setName(e.currentTarget.value)} />
-                        <Input placeholder="Valor:" onInput={(e) => setValue(Number(e.currentTarget.value))} />
+                        <Input placeholder="Valor:" onInput={(e) => setValue(Number(e.currentTarget.value.replace(",", ".")))} />
                         <SendMoneyButton type="submit">Registrar</SendMoneyButton>
                     </Form>
                 </Modal>
@@ -329,7 +329,7 @@ export const ContainerInput = () => {
                     }}>
                         <TitleMoney>Editar registro</TitleMoney>
                         <Input placeholder="Nome:" onInput={(e) => setName(e.currentTarget.value)} value={name()} />
-                        <Input placeholder="Valor:" onInput={(e) => setValue(Number(e.currentTarget.value))} value={value()} />
+                        <Input placeholder="Valor:" onInput={(e) => setValue(Number(e.currentTarget.value.replace(",", ".")))} value={value()} />
                         <SendMoneyButton type="submit">Editar</SendMoneyButton>
                     </Form>
                 </Modal>

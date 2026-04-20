@@ -44,7 +44,7 @@ type ModalProps = {
 
 export const Modal: Component<ModalProps> = ({ children, onClose }) => {
     return (
-        <Overlay onClick={onClose}>
+        <Overlay>
             <ContainerModal onClick={(e) => e.stopPropagation()}>
                 <CloseButton onClick={onClose}>X</CloseButton>
                 {children}
