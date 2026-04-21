@@ -16,10 +16,8 @@ const ContainerGraphic = styled('div')`
     display: flex;
     align-items: end;
     justify-content: center;
-    width: 800px;
+    width: 1000px;
     height: 100%;
-    /* border-bottom: 2px solid rgba(0, 0, 0, 0.1); */
-    /* border-left: 2px solid rgba(0, 0, 0, 0.1); */
     overflow: hidden;
     gap: 20px;
 `
