@@ -5,7 +5,7 @@ import { styled } from "solid-styled-components"
 import { Modal } from "../../utils/modal"
 import { AiOutlineDelete } from 'solid-icons/ai'
 import { AiFillEdit } from 'solid-icons/ai'
-import { useMoney } from "./MoneyContext"
+import { useMoney } from "./moneyContext"
 
 const ContainerMaster = styled('div')`
     display: flex;
