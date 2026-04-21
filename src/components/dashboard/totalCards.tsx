@@ -1,5 +1,5 @@
 import { styled } from "solid-styled-components"
-import { useMoney } from "./MoneyContext"
+import { useMoney } from "./moneyContext"
 
 const ContainerMaster = styled('div')`
     display: flex;

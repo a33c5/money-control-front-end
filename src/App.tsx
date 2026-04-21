@@ -1,4 +1,4 @@
-import { MoneyProvider } from "./components/dashboard/MoneyContext"
+import { MoneyProvider } from "./components/dashboard/moneyContext"
 import { DashBoard } from "./pages/dashboard"
 
 function App() {
